@@ -1,0 +1,85 @@
+<div class="row mt-5 p-3 blue-row sticky-top">
+    <div class="col col-md-12 text-center">
+        <span class="h3">
+            Real Time Vaccine Availability
+        </span>
+    </div>
+</div>
+<form class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg" (submit)="checkAvailability()"
+    ngNativeValidate>
+    <div class="form-group">
+        <label for="state">State</label>
+        <select class="form-control" [(ngModel)]="state" placeholder="Select" name="state" (change)="fetchCities()"
+            id="state" required>
+            <option *ngFor="let state of stateList" [value]="state">{{state}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="city">City</label>
+        <select class="form-control" [(ngModel)]="city" name="city" required id="city">
+            <option *ngFor="let district of districtList" [value]="district">{{district}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="date">Select the Appointment Date</label>
+        <input type="date" class="form-control" [(ngModel)]="date" name="date" id="date">
+    </div>
+    <div class="form-group row text-center">
+        <div class="col-12 col-md-6 mt-3 mt-md-5">
+            <!-- <input type="submit" class="btn btn-outline-success" [disabled]="submitDisabled" value="Look for Vaccines"> -->
+            <button class="btn btn-outline-success mx-auto" [disabled]="submitDisabled" value="Look for Vaccines"
+                type="submit" id="submit">
+                <span class="spinner-border spinner-border-sm text-success" *ngIf="submitDisabled"></span>
+                {{checkMessage}} </button>
+        </div>
+        <div class="col-12 col-md-6 mt-3 mt-md-5">
+            <a href="https://selfregistration.cowin.gov.in/" target="_blank"><button
+                    class="btn btn-outline-warning ml-5 mx-auto" type="button" value="">CoWin Registration
+                    Page</button></a>
+        </div>
+    </div>
+</form>
+
+<div class="container" *ngIf="errorMessage">
+    <div class="row mx-auto">
+        <div class="col text-center mt-5 h3 text-danger">
+            Oops! No centre's were available. Try again later.
+        </div>
+    </div>
+</div>
+<div class="container mt-5 table-responsive" *ngIf="showSlots">
+    <table class="table table-hover text-center col col-md-12">
+        <thead class="thead-blue">
+            <tr >
+                <th >
+                    Centre
+                </th>
+                <th >
+                    Age Limit
+                </th>
+                <th >
+                    Vaccine
+                </th>
+                <th >
+                    Slots
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let slot of slots">
+                <td>
+                    {{slot.name}}
+                </td>
+                <td>
+                    {{slot.ageLimit}}+
+                </td>
+                <td>
+                    {{slot.vaccineType}}
+                </td>
+                <td>
+                    <span class="btn btn-outline-info"> {{slot.availableSlots}} </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

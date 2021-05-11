@@ -1,0 +1,13 @@
+#greyFont{
+    color: slategray;
+}
+
+.navbar-brand > a {
+    text-decoration: none;
+    color: gray;
+}
+
+.navbar-brand > a:hover{
+    text-decoration: none;
+    color: whitesmoke;
+}

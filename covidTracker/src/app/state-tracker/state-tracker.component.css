@@ -1,0 +1,22 @@
+.dark-bg{
+    background-color: whitesmoke !important;
+    color: black !important;
+}
+
+.blue-row{
+    background-color:rgb(26, 64, 125) !important;
+    color: whitesmoke !important;
+}
+
+/* .table{
+    table-layout: fixed !important;
+} */
+
+.grey-card{
+    background-color: grey;
+    color: black;
+}
+
+.blue-form{
+    border-color: rgb(26, 64, 125) !important;
+}
