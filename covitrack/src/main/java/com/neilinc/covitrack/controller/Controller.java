@@ -6,15 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.neilinc.covitrack.service.ServiceLayer;
 
 @RestController
-@CrossOrigin(allowedHeaders = "*")
+@CrossOrigin(allowedHeaders = {"*"})
 public class Controller {
 
 	@Autowired
@@ -38,21 +38,12 @@ public class Controller {
 		return new ResponseEntity<String>("Failure", HttpStatus.BAD_REQUEST);
 	}
 	
-	@GetMapping("/startthesearch")
-	private void searchStart(@RequestParam(name = "private_key") String id) {
-		if(id.equals("1997")) {
-			service.flipSwitchTrue();
-		}
-	}	
-//	@GetMapping("/sendemail")
-//	private void sendEmail() {
-//		service.sendEmail();
-//	}
-	
-	@GetMapping("/stopthesearch")
-	private void searchStop(@PathVariable(name = "private_key") String id) {
-		if(id.equals("7991")) {
-			service.flipSwitchFalse();
-		}
+	@GetMapping(path = "/unsubscribe")
+	public ResponseEntity<String> unsubscribeAlerts(@RequestParam(name="id") int id){
+		System.out.println("id "+ id);
+		if(service.inactivateUser(id))
+			return new ResponseEntity<String>("You have been successfully unsubscribed for alerts", HttpStatus.OK);
+		
+		return new ResponseEntity<String>("Unsuccessful", HttpStatus.BAD_GATEWAY);
 	}
 }

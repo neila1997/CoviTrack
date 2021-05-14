@@ -1,12 +1,10 @@
 package com.neilinc.covitrack.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +20,7 @@ public class DaoImpl {
 	public boolean registerForAlerts(User user) {
 		
 		try {
-		TypedQuery<User> query = em.createQuery("select user from User user where user.email = :email", User.class);
+		TypedQuery<User> query = em.createQuery("select user from User user where user.email = :email and user.active = 1", User.class);
 		List<User>  list = query.setParameter("email", user.getEmail()).getResultList();
 		if (list.size() > 0) {
 			System.out.println("User Already Exists");
@@ -47,10 +45,19 @@ public class DaoImpl {
 	
 	public List<User> retrieveUserByDistrict(int district){
 
-		TypedQuery<User> query = em.createQuery("select user from User user where user.city_id = :city_id", User.class).setParameter("city_id", district);
+		TypedQuery<User> query = em.createQuery("select user from User user where user.city_id = :city_id and user.active = 1", User.class).setParameter("city_id", district);
 		List<User> users = query.getResultList();
 		
 		return users;
+	}
+	
+	public boolean inactivateUser(int id) {
+		int query = em.createQuery("update User user SET user.active = 0 WHERE user.id = :id").setParameter("id", id).executeUpdate();
+		
+		if(query > 0)
+			return true;
+		
+		return false;
 	}
  
 }

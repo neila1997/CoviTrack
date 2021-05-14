@@ -9,6 +9,7 @@ public class Slots {
 	private String city;
 	private String state;
 	private String pincode;
+	private String sessionId;
 	private int age;
 	
 	public Slots(int capacity, String centerName, String doseType, String slotDate) {
@@ -20,7 +21,7 @@ public class Slots {
 	}
 	
 	public Slots(int capacity, String centerName, String doseType, String slotDate, String city, String state,
-			int age, String pincode) {
+			int age, String pincode, String sessionId) {
 		super();
 		this.capacity = capacity;
 		this.centerName = centerName;
@@ -30,6 +31,7 @@ public class Slots {
 		this.state = state;
 		this.age = age;
 		this.pincode = pincode;
+		this.sessionId = sessionId;
 	}
 
 	public int getCapacity() {
@@ -89,10 +91,19 @@ public class Slots {
 		this.pincode = pincode;
 	}
 
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
 	@Override
 	public String toString() {
 		return "Slots [capacity=" + capacity + ", centerName=" + centerName + ", doseType=" + doseType + ", slotDate="
-				+ slotDate + ", city=" + city + ", state=" + state + ", pincode=" + pincode + ", age=" + age + "]";
+				+ slotDate + ", city=" + city + ", state=" + state + ", pincode=" + pincode + ", sessionId=" + sessionId
+				+ ", age=" + age + "]";
 	}	
 
 }

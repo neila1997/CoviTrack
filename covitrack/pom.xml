@@ -13,7 +13,13 @@
 	<artifactId>covitrack</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>covitrack</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Vaccine Alert Sending Tool</description>
+	<developers>
+		<developer>
+			<name>Neil Abraham</name>
+			<email>abraham.neil1997@gmail.com</email>
+		</developer>
+	</developers>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>

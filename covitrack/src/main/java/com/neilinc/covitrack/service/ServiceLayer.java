@@ -16,12 +16,10 @@ public interface ServiceLayer {
 	public List<Integer> getDistinctDistricts();
 	
 	public void displayAlerts(int district);
-
-	public void flipSwitchTrue();
-
-	public void flipSwitchFalse();
 	
 	public void getCenters();
 
 	void sendEmail(Map<User, List<Slots>> map);
+	
+	boolean inactivateUser(int id);
 }
