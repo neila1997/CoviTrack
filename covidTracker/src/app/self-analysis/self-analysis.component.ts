@@ -32,17 +32,17 @@ export class SelfAnalysisComponent implements OnInit {
     if (this.fever === false)
       a = 0
     console.log($("input[name='contact']:checked").val())
-    this.api.covidPredict(a).subscribe(
-      x => {
-        console.log(x)
-        if (x === "True")
-          this.message = "You may be suffering from Covid-19. Please get yourself tested. "
-        else
-          this.message = "You seem fine niggah!"
+    // this.api.covidPredict(a).subscribe(
+    //   x => {
+    //     console.log(x)
+    //     if (x === "True")
+    //       this.message = "You may be suffering from Covid-19. Please get yourself tested. "
+    //     else
+    //       this.message = "You seem fine niggah!"
 
-        document.getElementById("toggleModal").click()
-      }
-    )
+    //     document.getElementById("toggleModal").click()
+    //   }
+    // )
   }
 
 }

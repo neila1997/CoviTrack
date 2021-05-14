@@ -1,7 +1,7 @@
 <div class="mt-5 p-3 row blue-row sticky-top">
     <div class="col col-12 text-center">
         <span class="h3">
-            Receive an email on slot availability
+            Register with CoviTrack's live slot tracker
         </span>
     </div>
 </div>
@@ -9,7 +9,7 @@
 <div class="container">
     <form id="alert-form" [formGroup]="alertForm"
         class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg"
-        (submit)="registerForAlerts()" autocomplete="off" ngNativeValidate>
+        (submit)="registerForAlerts()" autocomplete="off">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" name="name" required formControlName="name">
@@ -58,9 +58,9 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="btn" data-dismiss="modal">x</button>
+                <button class="btn ml-auto close close-button" data-dismiss="modal">x</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-center mt-3">
                 {{modalMessage}}
             </div>
         </div>
