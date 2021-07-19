@@ -12,8 +12,11 @@ export class availableSlots {
   pincode: number
   district: string
   availableSlots: number
+  doseOneSlots: number
+  doseTwoSlots: number
   vaccineType: string
   ageLimit: number
+  fees: string
 }
 
 @Component({
@@ -74,7 +77,6 @@ export class VaccineAvailabilityComponent implements OnInit {
         // console.log(this.districtList)
       }
     )
-    console.log(this.dateFormatted)
   }
 
   checkAvailability() {
@@ -86,24 +88,32 @@ export class VaccineAvailabilityComponent implements OnInit {
     this.dateFormatted = formatDate(this.date, format, locale)
     this.api.checkAvailability(this.districts.get(this.city), this.dateFormatted).subscribe(
       x => {
-        console.log(this.dateFormatted)
+        // console.log(this.dateFormatted)
         console.log(x)
-        if (x.sessions.length === 0)
-          this.errorMessage = true
-        else
-          this.showSlots = true
-        for (var i = 0; i < x.sessions.length; i++) {
-          // console.log("Inside")
-          // console.log(x.sessions.length)
+        let flag = false
+        let i = 0
+        for (var j = 0; j < x.sessions.length; j++) {
+          console.log("Available" + x.sessions[j].available_capacity)
+          if (parseInt(JSON.stringify(x.sessions[j].available_capacity)) != 0){
           this.slots[i] = new availableSlots()
-          this.slots[i].name = x.sessions[i].name
-          this.slots[i].address = x.sessions[i].address
-          this.slots[i].pincode = x.sessions[i].pincode
-          this.slots[i].district = x.sessions[i].district_name
-          this.slots[i].ageLimit = x.sessions[i].min_age_limit
-          this.slots[i].availableSlots = Math.floor(x.sessions[i].available_capacity)
-          this.slots[i].vaccineType = x.sessions[i].vaccine
+          this.slots[i].name = x.sessions[j].name
+          this.slots[i].address = x.sessions[j].address
+          this.slots[i].pincode = x.sessions[j].pincode
+          this.slots[i].district = x.sessions[j].district_name
+          this.slots[i].ageLimit = x.sessions[j].min_age_limit
+          this.slots[i].availableSlots = Math.floor(x.sessions[j].available_capacity)
+          this.slots[i].doseOneSlots = Math.floor(x.sessions[j].available_capacity_dose1)
+          this.slots[i].doseTwoSlots = Math.floor(x.sessions[j].available_capacity_dose2)
+          console.log(x.sessions[j].fee_type)
+          x.sessions[j].fee != "0" ? this.slots[i].fees = x.sessions[j].fee : this.slots[i].fees = "Free"
+          this.slots[i].vaccineType = x.sessions[j].vaccine
+          flag = true
+          i++
+          }
         }
+
+        flag === true ? this.showSlots = true : this.errorMessage = true
+
         this.submitDisabled = false
         this.checkMessage = "Check Slot Availability"
 

@@ -11,7 +11,6 @@ import { FooterComponent } from './footer/footer.component';
 import { VaccineAvailabilityComponent } from './vaccine-availability/vaccine-availability.component';
 import { SelfAnalysisComponent } from './self-analysis/self-analysis.component';
 import { RegisterAlertsComponent } from './register-alerts/register-alerts.component';
-import { UnsubscribeComponent } from './unsubscribe/unsubscribe.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { UnsubscribeComponent } from './unsubscribe/unsubscribe.component';
     StateTrackerComponent,
     VaccineAvailabilityComponent,
     SelfAnalysisComponent,
-    RegisterAlertsComponent,
-    UnsubscribeComponent
+    RegisterAlertsComponent
   ],
   imports: [
     BrowserModule,

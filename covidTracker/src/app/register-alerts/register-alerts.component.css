@@ -21,11 +21,3 @@
     background-color:rgb(26, 64, 125);
     color: whitesmoke;
 }
-
-.modal-header{
-    background-color: rgb(26, 64, 125) !important;
-}
-
-.close-button{
-    color: whitesmoke;
-}

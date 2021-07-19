@@ -50,18 +50,21 @@
 <div class="container mt-5 table-responsive" *ngIf="showSlots">
     <table class="table table-hover text-center col col-md-12">
         <thead class="thead-blue">
-            <tr >
-                <th >
+            <tr>
+                <th>
                     Centre
                 </th>
-                <th >
+                <th>
                     Age Limit
                 </th>
-                <th >
+                <th>
                     Vaccine
                 </th>
-                <th >
+                <th>
                     Slots
+                </th>
+                <th>
+                    Cost
                 </th>
             </tr>
         </thead>
@@ -77,7 +80,16 @@
                     {{slot.vaccineType}}
                 </td>
                 <td>
-                    <span class="btn btn-outline-info"> {{slot.availableSlots}} </span>
+                    <span class="btn btn-outline-info">Dose 1: {{slot.doseOneSlots}} </span>
+                    <span class="ml-1 btn btn-outline-info">Dose 2: {{slot.doseTwoSlots}} </span>
+                </td>
+                <td>
+                    <ng-template [ngIf]="slot.fees != 'Free'">
+                        <span class="btn btn-outline-info">&#8377; {{slot.fees}} </span>
+                    </ng-template>
+                    <ng-template [ngIf]="slot.fees == 'Free'">
+                        <span class="btn btn-outline-info">{{slot.fees}} </span>
+                    </ng-template>
                 </td>
             </tr>
         </tbody>
