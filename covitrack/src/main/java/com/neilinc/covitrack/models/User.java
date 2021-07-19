@@ -38,10 +38,16 @@ public class User {
 	@Column(name="city_id")
 	private int city_id;
 	
+	@Column(name="slot_type")
+	private int slotType;
+	
+	@Column(name="vaccine_type")
+	private String vaccineType;
+	
 	public User() {
 	}
 	
-	public User(String name, String state, String city, String email, int ageGroup, int active, int city_id) {
+	public User(String name, String state, String city, String email, int ageGroup, int active, int city_id, String vaccineType, int slotType) {
 		super();
 		this.name = name;
 		this.state = state;
@@ -50,6 +56,16 @@ public class User {
 		this.ageGroup = ageGroup;
 		this.active = active;
 		this.city_id = city_id;
+		this.slotType = slotType;
+		this.vaccineType = vaccineType;
+	}
+
+	public int getSlotType() {
+		return slotType;
+	}
+
+	public void setSlotType(int slotType) {
+		this.slotType = slotType;
 	}
 
 	public int getId() {
@@ -116,10 +132,19 @@ public class User {
 		this.city_id = city_id;
 	}
 
+	public String getVaccineType() {
+		return vaccineType;
+	}
+
+	public void setVaccineType(String vaccineType) {
+		this.vaccineType = vaccineType;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", state=" + state + ", city=" + city + ", email=" + email
-				+ ", ageGroup=" + ageGroup + ", active=" + active + ", city_id=" + city_id + "]";
+				+ ", ageGroup=" + ageGroup + ", active=" + active + ", city_id=" + city_id + ", slotType=" + slotType
+				+ ", vaccineType=" + vaccineType + "]";
 	}
 	
 }

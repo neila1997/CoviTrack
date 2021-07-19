@@ -49,12 +49,21 @@ public class ServiceLayerImpl implements ServiceLayer {
 	@Value("${app.baseurl}")
 	private String frontEndBaseUrl;
 
+	@Value("${email.id}")
+	private String emailId;
+	
+	@Value("${email.username}")
+	private String emailUsername;
+	
+	@Value("${email.password}")
+	private String emailPassword;
+
 	@Override
 	public boolean registerForAlerts(String form) throws JSONException {
 
 		try {
-			String name, email, state, city;
-			int age, city_id;
+			String name, email, state, city, vaccineType;
+			int age, city_id, slotType;
 			JSONObject json = new JSONObject(form);
 			System.out.println(json.toString());
 			email = json.getString("email");
@@ -63,10 +72,12 @@ public class ServiceLayerImpl implements ServiceLayer {
 			state = json.getString("state");
 			age = json.getInt("age");
 			city_id = json.getInt("city_id");
+			slotType = json.getInt("dose");
+			vaccineType = json.getString("vaccine");
 
 			System.out.println(name + " " + email + " " + age + " " + state + " " + city + " " + city_id);
 
-			User user = new User(name, state, city, email, age, 1, city_id);
+			User user = new User(name, state, city, email, age, 1, city_id, vaccineType.toUpperCase(), slotType);
 			return dao.registerForAlerts(user);
 
 		} catch (JSONException e) {
@@ -88,6 +99,8 @@ public class ServiceLayerImpl implements ServiceLayer {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		String formattedDate = myDateObj.format(myFormatObj);
+		
+		try {
 
 		List<Integer> districts = this.getDistinctDistricts();
 
@@ -104,6 +117,10 @@ public class ServiceLayerImpl implements ServiceLayer {
 
 			this.mapSlotToList(response, district);
 		}
+		}
+		catch (Exception e) {
+			System.out.println("Oops Error: "+e);
+		}
 	}
 
 	@Override
@@ -118,12 +135,24 @@ public class ServiceLayerImpl implements ServiceLayer {
 			JSONArray array = new JSONArray(str);
 			// looping through the sessions
 			for (int i = 0; i < array.length(); i++) {
-				String centerName, doseType = "", slotDate = "", state, city, pincode, sessionId;
-				int capacity = 0, age = 0;
+				String centerName, doseType = "", slotDate = "", state, city, pincode, sessionId, fee;
+				int capacity = 0, age = 0, slot1Slots = 0, slot2Slots = 0;
 				centerName = array.getJSONObject(i).getString("name");
 				state = array.getJSONObject(i).getString("state_name");
 				city = array.getJSONObject(i).getString("district_name");
 				pincode = array.getJSONObject(i).getString("pincode");
+				Map<String, String> vaccines = new HashMap<String, String>();
+				String feeType = array.getJSONObject(i).getString("fee_type");
+			
+				if (!feeType.toUpperCase().equals("FREE")){
+				JSONArray vaccine_array = (array.getJSONObject(i).getJSONArray("vaccine_fees"));
+				for (int vac = 0; vac < vaccine_array.length(); vac++) {
+					System.out.println(vaccine_array.getJSONObject(vac).getString("vaccine"));
+					System.out.println(vaccine_array.getJSONObject(vac).getString("fee"));
+					vaccines.put(vaccine_array.getJSONObject(vac).getString("vaccine"), vaccine_array.getJSONObject(vac).getString("fee").equals("0")?"Free":vaccine_array.getJSONObject(vac).getString("fee"));
+				}}
+					
+					
 
 				JSONArray array1 = new JSONArray(array.getJSONObject(i).getString("sessions"));
 				for (int j = 0; j < array1.length(); j++) {
@@ -131,13 +160,18 @@ public class ServiceLayerImpl implements ServiceLayer {
 					doseType = array1.getJSONObject(j).getString("vaccine");
 					capacity = array1.getJSONObject(j).getInt("available_capacity");
 					age = array1.getJSONObject(j).getInt("min_age_limit");
+					slot1Slots = array1.getJSONObject(j).getInt("available_capacity_dose1");
+					slot2Slots = array1.getJSONObject(j).getInt("available_capacity_dose2");
+					
+					if (vaccines.size() != 0)
+							fee = vaccines.get(doseType);
+					else
+							fee = "Free";
 					sessionId = array1.getJSONObject(j).getString("session_id");
 
 					if (capacity > 0) {
-//						System.out.println("Neil Test");
-//						System.out.println(capacity + " " + centerName);
 						slots.add(new Slots(capacity, centerName, doseType, slotDate, city, state, age, pincode,
-								sessionId));
+								sessionId, slot1Slots, slot2Slots, fee));
 						cities.add(city);
 						ageGroups.add(age);
 					}
@@ -153,17 +187,18 @@ public class ServiceLayerImpl implements ServiceLayer {
 
 	}
 
+	/*
+	 * This function checks whether a user is eligible for the slots that the API fetches. 
+	 */
 	@Override
 	public void displayAlerts(int district) {
 
 		List<User> users = dao.retrieveUserByDistrict(district);
 		Map<User, List<Slots>> map = new HashMap<User, List<Slots>>();
 		boolean flag = false;
-
-//		System.out.println("District ID: " + district);
-//		System.out.println("Applicable Slots \n");
+		
 		for (User user : users) {
-//			System.out.println(user.getName());
+			System.out.println(user.getName() + " Slot: " + user.getSlotType());
 			for (Slots slot : slots) {
 				if (slotSessions.get(user.getEmail()) == null) {
 					System.out.println(slotSessions.size());
@@ -171,14 +206,18 @@ public class ServiceLayerImpl implements ServiceLayer {
 					System.out.println(user.getName());
 					slotSessions.put(user.getEmail(), new LinkedList<String>());
 				}
-				if (!slotSessions.get(user.getEmail()).contains(slot.getSessionId())) {
-					if (user.getAgeGroup() == slot.getAge()) {
+				
+				
+				//This Logic would create a boolean variable that checks for the slot availability of a vaccine for the dose the user wants.
+				boolean slotsAvailable = false;
+				if ((slot.getSlot1Slots() > 0 && user.getSlotType() == 1) || (slot.getSlot2Slots() > 0 && user.getSlotType() == 2) || user.getSlotType() == 0)
+					slotsAvailable = true;
+				
+				//Checking whether the user has been alerted for this session previously. 
+				if (!slotSessions.get(user.getEmail()).contains(slot.getSessionId()) && slotsAvailable) {
+					if (user.getAgeGroup() == slot.getAge() && user.getVaccineType().equals(slot.getDoseType().toUpperCase())) {
 						flag = true;
 						slotSessions.get(user.getEmail()).add(slot.getSessionId());
-						System.out.println("User: " + user.getName() + " " + user.getEmail());
-						System.out.println("Mapped Session");
-						System.out.println(
-								slot.getSessionId() + " " + slot.getCenterName() + " " + slot.getCapacity() + "\n");
 						if (map.containsKey(user))
 							map.get(user).add(slot);
 						else {
@@ -195,14 +234,10 @@ public class ServiceLayerImpl implements ServiceLayer {
 
 	}
 
+	
 	@Override
 	public void sendEmail(Map<User, List<Slots>> map) {
 		// Recipient's email ID needs to be mentioned.
-
-		// Sender's email ID needs to be mentioned
-		String from = "covitrack@yahoo.com";
-		final String username = "covitrack";// change accordingly
-		final String password = "mruwwvzfhtjqoswy";// change accordingly
 
 		// Assuming you are sending email through relay.jangosmtp.net
 		String host = "smtp.mail.yahoo.com";
@@ -216,7 +251,7 @@ public class ServiceLayerImpl implements ServiceLayer {
 		// Get the Session object.
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
+				return new PasswordAuthentication(emailUsername, emailPassword);
 			}
 		});
 
@@ -233,7 +268,7 @@ public class ServiceLayerImpl implements ServiceLayer {
 				String to = user.getEmail();
 
 				// Set From: header field of the header.
-				message.setFrom(new InternetAddress(from));
+				message.setFrom(new InternetAddress(emailId));
 
 				// Set To: header field of the header.
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
@@ -270,8 +305,10 @@ public class ServiceLayerImpl implements ServiceLayer {
 						+ "                    <tr>"
 						+ "                        <th> Center Name </th>"
 						+ "                        <th> Minimum Age </th>"
-						+ "                        <th> Available Slots </th>"
 						+ "                        <th> Vaccine Name </th>"
+						+ "                        <th> Cost </th>"
+						+ "                        <th> Available Slots for Dose 1</th>"
+						+ "                        <th> Available Slots for Dose 2</th>"
 						+ "                        <th> Date </th>"
 						+ "                        <th> City </th>"
 						+ "                        <th> State </th>"
@@ -281,8 +318,8 @@ public class ServiceLayerImpl implements ServiceLayer {
 						+ "                <tbody>";
 
 				for (Slots slot : slots) {
-					content += "<tr> " + "<td>" + slot.getCenterName() + "</td>" + "<td>" + slot.getAge() + "</td>" + "<td>" + slot.getCapacity() + "</td>"
-							+ "<td>" + slot.getDoseType() + "</td>" + "<td>" + slot.getSlotDate() + "</td>" + "<td>"
+					content += "<tr> " + "<td>" + slot.getCenterName() + "</td>" + "<td>" + slot.getAge() + "</td>" +"<td>" + slot.getDoseType() + "<td>" + slot.getFees() +  "<td>" + slot.getSlot1Slots() + "</td>"+ "<td>" + slot.getSlot2Slots() + "</td>"
+							+ "</td>" + "<td>" + slot.getSlotDate() + "</td>" + "<td>"
 							+ slot.getCity() + "</td>" + "<td>" + slot.getState() + "</td>" + "<td>" + slot.getPincode()
 							+ "</td>" + "</tr>";
 				}

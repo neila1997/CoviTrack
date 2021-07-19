@@ -3,6 +3,33 @@ package com.neilinc.covitrack.models;
 public class Slots {
 	
 	private int capacity;
+	private int slot1Slots;
+	private int slot2Slots;
+	private String fees;
+	public int getSlot1Slots() {
+		return slot1Slots;
+	}
+
+	public void setSlot1Slots(int slot1Slots) {
+		this.slot1Slots = slot1Slots;
+	}
+
+	public int getSlot2Slots() {
+		return slot2Slots;
+	}
+
+	public void setSlot2Slots(int slot2Slots) {
+		this.slot2Slots = slot2Slots;
+	}
+
+	public String getFees() {
+		return fees;
+	}
+
+	public void setFees(String fees) {
+		this.fees = fees;
+	}
+
 	private String centerName;
 	private String doseType;
 	private String slotDate;
@@ -32,6 +59,23 @@ public class Slots {
 		this.age = age;
 		this.pincode = pincode;
 		this.sessionId = sessionId;
+	}	
+	
+	public Slots(int capacity, String centerName, String doseType, String slotDate, String city, String state,
+			int age, String pincode, String sessionId, int slot1, int slot2, String fees) {
+		super();
+		this.capacity = capacity;
+		this.centerName = centerName;
+		this.doseType = doseType;
+		this.slotDate = slotDate;
+		this.city = city;
+		this.state = state;
+		this.age = age;
+		this.pincode = pincode;
+		this.sessionId = sessionId;
+		this.slot1Slots = slot1;
+		this.slot2Slots = slot2;
+		this.fees = fees;
 	}
 
 	public int getCapacity() {
@@ -101,9 +145,11 @@ public class Slots {
 
 	@Override
 	public String toString() {
-		return "Slots [capacity=" + capacity + ", centerName=" + centerName + ", doseType=" + doseType + ", slotDate="
-				+ slotDate + ", city=" + city + ", state=" + state + ", pincode=" + pincode + ", sessionId=" + sessionId
-				+ ", age=" + age + "]";
+		return "Slots [capacity=" + capacity + ", slot1Slots=" + slot1Slots + ", slot2Slots=" + slot2Slots + ", fees="
+				+ fees + ", centerName=" + centerName + ", doseType=" + doseType + ", slotDate=" + slotDate + ", city="
+				+ city + ", state=" + state + ", pincode=" + pincode + ", sessionId=" + sessionId + ", age=" + age
+				+ "]";
 	}	
+	
 
 }

@@ -55,22 +55,23 @@ export class RegisterAlertsComponent implements OnInit {
     console.log("test")
     // console.log(this.alertForm.controls['city'].value)
     this.alertForm.controls['city_id'].setValue(this.districts.get(this.alertForm.controls['city'].value))
+    this.alertForm.controls['dose'].setValue(Number(this.alertForm.controls['dose_type'].value))
+    console.log(this.alertForm.value)
     console.log(this.alertForm.value)
     this.api.register(this.alertForm.value).subscribe(
       x => {
         console.log(x)
         this.modalMessage = "You have been successfully registered. We will update you with availability of slots on your registered email id."
-        document.getElementById("alertModalButton").click()
       }, y => {
         console.log(y)
         this.modalMessage = "Oops! Something went wrong. Please try again later."
-        document.getElementById("alertModalButton").click()
       }
     )
+    document.getElementById("alertModalButton").click()
   }
 
   ngOnInit(): void {
-    this.alertForm = this.form.group({ 'name': ['', Validators.required], 'email': ['', Validators.required], 'age': [18, Validators.required], 'state': ['', Validators.required], 'city': ['', Validators.required], 'city_id': [1, Validators.required] })
+    this.alertForm = this.form.group({ 'name': ['', Validators.required], 'email': ['', Validators.required], 'age': [18, Validators.required], 'state': ['', Validators.required], 'city': ['', Validators.required], 'city_id': [1, Validators.required], 'vaccine': ['', Validators.required], 'dose_type':[0, Validators.required], 'dose':[0, Validators.required] })
   }
 
 }

@@ -1,13 +1,10 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-// const baseUrl = "http://localhost:5000"
-const baseUrl = "http://covitrack.ap-south-1.elasticbeanstalk.com/"
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class ApiService {
 
   constructor(private http: HttpClient) {
@@ -36,18 +33,14 @@ export class ApiService {
   }
 
   //Python API for prediction
-  // covidPredict(param){
-  //   return this.http.post("http://127.0.0.1:8000/covidpredictor", param, {responseType: 'text'})
-  // }
+  covidPredict(param){
+    return this.http.post("http://127.0.0.1:8000/covidpredictor", param, {responseType: 'text'})
+  }
 
   //Spring Boot API for registration
   register(form){
     console.log(form)
-    return this.http.post(baseUrl+"/registerforalerts", form, {responseType: 'text'})
-  }
-
-  unsubscribe(id:Number){
-    return this.http.get(baseUrl+"/unsubscribe?id="+id)
+    return this.http.post("http://localhost:8080/registerforalerts", form, {responseType: 'text'})
   }
 
 }

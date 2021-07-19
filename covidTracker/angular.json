@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "jquery"
+            ],
             "outputPath": "dist/covidTracker",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -29,7 +32,7 @@
               "node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery/dist/jquery.js",
               "./node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
