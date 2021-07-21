@@ -64,6 +64,7 @@ public class ServiceLayerImpl implements ServiceLayer {
 		try {
 			String name, email, state, city, vaccineType;
 			int age, city_id, slotType;
+			boolean freeDose;
 			JSONObject json = new JSONObject(form);
 			System.out.println(json.toString());
 			email = json.getString("email");
@@ -74,14 +75,16 @@ public class ServiceLayerImpl implements ServiceLayer {
 			city_id = json.getInt("city_id");
 			slotType = json.getInt("dose");
 			vaccineType = json.getString("vaccine");
+			freeDose = json.getInt("free_dose") == 0 ? false : true;
 
-			System.out.println(name + " " + email + " " + age + " " + state + " " + city + " " + city_id);
+//			System.out.println(name + " " + email + " " + age + " " + state + " " + city + " " + city_id);
 
-			User user = new User(name, state, city, email, age, 1, city_id, vaccineType.toUpperCase(), slotType);
+			User user = new User(name, state, city, email, age, 1, city_id, vaccineType.toUpperCase(), slotType, freeDose);
 			return dao.registerForAlerts(user);
 
 		} catch (JSONException e) {
 			System.err.println("JSON Exception");
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -105,7 +108,7 @@ public class ServiceLayerImpl implements ServiceLayer {
 		List<Integer> districts = this.getDistinctDistricts();
 
 		for (Integer district : districts) {
-			System.out.println(district);
+//			System.out.println(district);
 			final String uri = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id="
 					+ district + "&date=" + formattedDate;
 
@@ -147,8 +150,8 @@ public class ServiceLayerImpl implements ServiceLayer {
 				if (!feeType.toUpperCase().equals("FREE")){
 				JSONArray vaccine_array = (array.getJSONObject(i).getJSONArray("vaccine_fees"));
 				for (int vac = 0; vac < vaccine_array.length(); vac++) {
-					System.out.println(vaccine_array.getJSONObject(vac).getString("vaccine"));
-					System.out.println(vaccine_array.getJSONObject(vac).getString("fee"));
+//					System.out.println(vaccine_array.getJSONObject(vac).getString("vaccine"));
+//					System.out.println(vaccine_array.getJSONObject(vac).getString("fee"));
 					vaccines.put(vaccine_array.getJSONObject(vac).getString("vaccine"), vaccine_array.getJSONObject(vac).getString("fee").equals("0")?"Free":vaccine_array.getJSONObject(vac).getString("fee"));
 				}}
 					
@@ -198,12 +201,21 @@ public class ServiceLayerImpl implements ServiceLayer {
 		boolean flag = false;
 		
 		for (User user : users) {
-			System.out.println(user.getName() + " Slot: " + user.getSlotType());
+//			System.out.println(user.getName() + " Slot: " + user.getSlotType());
+				System.out.println(user.getName() + " Dose Free: "+user.isFreeDose());
 			for (Slots slot : slots) {
+				if (!slot.getFees().toUpperCase().equals("FREE") && user.isFreeDose()) {
+					System.out.println(slot.getCenterName());
+					System.out.println(slot.getDoseType());
+					System.out.println(slot.getSlotDate());
+					System.out.println(slot.getFees());
+					continue;
+				}
+				
 				if (slotSessions.get(user.getEmail()) == null) {
-					System.out.println(slotSessions.size());
-					System.out.println("No Slots");
-					System.out.println(user.getName());
+//					System.out.println(slotSessions.size());
+//					System.out.println("No Slots");
+//					System.out.println(user.getName());
 					slotSessions.put(user.getEmail(), new LinkedList<String>());
 				}
 				

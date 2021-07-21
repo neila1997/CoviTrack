@@ -5,6 +5,7 @@
         </span>
     </div>
 </div>
+
 <form class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg" (submit)="checkAvailability()"
     ngNativeValidate>
     <div class="form-group">
@@ -34,7 +35,7 @@
         </div>
         <div class="col-12 col-md-6 mt-3 mt-md-5">
             <a href="https://selfregistration.cowin.gov.in/" target="_blank"><button
-                    class="btn btn-outline-warning ml-5 mx-auto" type="button" value="">CoWin Registration
+                    class="btn btn-outline-warning w ml-5 mx-auto" type="button" value="">CoWin Registration
                     Page</button></a>
         </div>
     </div>
@@ -47,51 +48,57 @@
         </div>
     </div>
 </div>
-<div class="container mt-5 table-responsive" *ngIf="showSlots">
-    <table class="table table-hover text-center col col-md-12">
-        <thead class="thead-blue">
-            <tr>
-                <th>
-                    Centre
-                </th>
-                <th>
-                    Age Limit
-                </th>
-                <th>
-                    Vaccine
-                </th>
-                <th>
-                    Slots
-                </th>
-                <th>
-                    Cost
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let slot of slots">
-                <td>
-                    {{slot.name}}
-                </td>
-                <td>
-                    {{slot.ageLimit}}+
-                </td>
-                <td>
-                    {{slot.vaccineType}}
-                </td>
-                <td>
-                    <span class="btn btn-outline-info">Dose 1: {{slot.doseOneSlots}} </span>
-                    <span class="ml-1 btn btn-outline-info">Dose 2: {{slot.doseTwoSlots}} </span>
-                </td>
-                <td>
-                    <ng-template [ngIf]="slot.fees != 'Free'">
-                        <span class="btn btn-outline-info">&#8377; {{slot.fees}} </span>
-                    </ng-template>
-                    <ng-template [ngIf]="slot.fees == 'Free'">
-                        <span class="btn btn-outline-info">{{slot.fees}} </span>
-                    </ng-template>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="mt-5 table-responsive table-padding" *ngIf="showSlots">
+
+    <div *ngFor="let date of slots| keyvalue" class="text-center mt-5">
+        <span class="font-weight-bold h5">
+            Date: {{date.key}}
+        </span>
+        <table class="table table-hover text-center mt-2 col col-md-12">
+            <thead class="thead-blue">
+                <tr>
+                    <th>
+                        Centre
+                    </th>
+                    <th>
+                        Age Limit
+                    </th>
+                    <th>
+                        Vaccine
+                    </th>
+                    <th>
+                        Slots
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let slot of date.value">
+                    <td>
+                        {{slot.name}}
+                    </td>
+                    <td>
+                        {{slot.ageLimit}}+
+                    </td>
+                    <td>
+                        {{slot.vaccineType}}
+                    </td>
+                    <td>
+                        <span class="btn btn-outline-info btn-sm btn-custom-dose">Dose 1: {{slot.doseOneSlots}} </span>
+                        <span class="ml-1 btn btn-outline-info btn-sm btn-custom-dose mt-2 mt-md-0">Dose 2: {{slot.doseTwoSlots}} </span>
+                    </td>
+                    <td>
+                        <ng-template [ngIf]="slot.fees != 0">
+                            <span class="btn btn-warning btn-sm btn-custom">&#8377; {{slot.fees}} </span>
+                        </ng-template>
+                        <ng-template [ngIf]="slot.fees === 0">
+                            <span class="btn btn-primary btn-sm btn-custom">Free </span>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

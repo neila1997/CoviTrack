@@ -8,7 +8,7 @@
 
 <div class="container">
     <form id="alert-form" [formGroup]="alertForm"
-        class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg"
+        class="mt-5 mb-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg"
         (submit)="registerForAlerts()" autocomplete="off" ngNativeValidate>
         <div class="form-group">
             <label class="font-weight-bold" for="name">Name</label>
@@ -51,15 +51,18 @@
             <label class="font-weight-bold" for="vaccine">Vaccine</label>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine" value="COVISHIELD">
+                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
+                        value="COVISHIELD">
                     Covishield
                 </label>
                 <label class="form-check-label ml-5">
-                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine" value="COVAXIN">
+                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
+                        value="COVAXIN">
                     Covaxin
                 </label>
                 <label class="form-check-label ml-5">
-                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine" value="SPUTNIK V">
+                    <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
+                        value="SPUTNIK V">
                     Sputnik V
                 </label>
             </div>
@@ -68,16 +71,28 @@
             <label for="dose_type" class="font-weight-bold">Dose Type</label>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type" value="1">
+                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
+                        value="1">
                     1st Dose
                 </label>
                 <label class="form-check-label ml-5">
-                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type" value="2">
+                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
+                        value="2">
                     2nd Dose
                 </label>
                 <label class="form-check-label ml-5">
-                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type" value="0">
+                    <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
+                        value="0">
                     Both Doses
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="free_dose" formControlName="free_dose" value="1">
+
+                <label class="form-check-label font-weight-bold">
+                    Show me only free doses
                 </label>
             </div>
         </div>

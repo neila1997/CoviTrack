@@ -1,4 +1,5 @@
 import { formatDate } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ApiService } from '../service/api.service';
@@ -16,7 +17,8 @@ export class availableSlots {
   doseTwoSlots: number
   vaccineType: string
   ageLimit: number
-  fees: string
+  fees: number
+  date: string
 }
 
 @Component({
@@ -35,13 +37,13 @@ export class VaccineAvailabilityComponent implements OnInit {
   districts = new Map<String, number>()
   stateList = []
   districtList = []
-  slots: availableSlots[] = []
   state = "Select a State"
   city = "Select a City"
   date: number
   dateFormatted: string
+  slots = new Map<string, availableSlots[]>()
 
-  constructor(private api: ApiService, private title: Title) {
+  constructor(private api: ApiService, private title: Title, private http: HttpClient) {
 
     this.title.setTitle("Slot Availability | CoviTrack")
 
@@ -69,7 +71,7 @@ export class VaccineAvailabilityComponent implements OnInit {
     this.api.fetchCities(this.states.get(this.state)).subscribe(
       x => {
         // console.log("🪵")
-        console.log(x)
+        // console.log(x)
         for (let district of x.districts) {
           this.districts.set(district.district_name, district.district_id)
         }
@@ -84,42 +86,68 @@ export class VaccineAvailabilityComponent implements OnInit {
     this.submitDisabled = true
     this.checkMessage = "Checking Availability"
     this.errorMessage = false
-    this.slots = []
+    this.slots = new Map<string, availableSlots[]>()
     this.dateFormatted = formatDate(this.date, format, locale)
+      
     this.api.checkAvailability(this.districts.get(this.city), this.dateFormatted).subscribe(
       x => {
-        // console.log(this.dateFormatted)
         console.log(x)
-        let flag = false
-        let i = 0
-        for (var j = 0; j < x.sessions.length; j++) {
-          console.log("Available" + x.sessions[j].available_capacity)
-          if (parseInt(JSON.stringify(x.sessions[j].available_capacity)) != 0){
-          this.slots[i] = new availableSlots()
-          this.slots[i].name = x.sessions[j].name
-          this.slots[i].address = x.sessions[j].address
-          this.slots[i].pincode = x.sessions[j].pincode
-          this.slots[i].district = x.sessions[j].district_name
-          this.slots[i].ageLimit = x.sessions[j].min_age_limit
-          this.slots[i].availableSlots = Math.floor(x.sessions[j].available_capacity)
-          this.slots[i].doseOneSlots = Math.floor(x.sessions[j].available_capacity_dose1)
-          this.slots[i].doseTwoSlots = Math.floor(x.sessions[j].available_capacity_dose2)
-          console.log(x.sessions[j].fee_type)
-          x.sessions[j].fee != "0" ? this.slots[i].fees = x.sessions[j].fee : this.slots[i].fees = "Free"
-          this.slots[i].vaccineType = x.sessions[j].vaccine
-          flag = true
-          i++
+        console.log(x.centers.length)
+        for (var i = 0; i < x.centers.length; i++) {
+          for (var j = 0; j < x.centers[i].sessions.length; j++) {
+            var slot = new availableSlots()
+            slot.fees = (x.centers[i].fee_type.toUpperCase() === 'FREE') ? 0 : 1
+            slot.name = x.centers[i].name
+            slot.address = x.centers[i].address
+            slot.district = x.centers[i].district_name
+            slot.pincode = x.centers[i].pincode
+            slot.ageLimit = x.centers[i].sessions[j].min_age_limit
+            slot.availableSlots = x.centers[i].sessions[j].available_capacity
+            slot.doseOneSlots = x.centers[i].sessions[j].available_capacity_dose1
+            slot.doseTwoSlots = x.centers[i].sessions[j].available_capacity_dose2
+            slot.vaccineType = x.centers[i].sessions[j].vaccine
+            slot.date = x.centers[i].sessions[j].date
+
+            if (slot.fees === 1)
+              for (var k = 0; k < x.centers[i].vaccine_fees.length; k++)
+                if (slot.vaccineType === x.centers[i].vaccine_fees[k].vaccine)
+                  slot.fees = x.centers[i].vaccine_fees[k].fee
+            if (!this.slots.has(slot.date)) {
+              // console.log("Test")
+              this.slots.set(slot.date, [])
+            }
+            if (slot.availableSlots > 0)
+              this.slots.get(slot.date).push(slot)
           }
         }
 
-        flag === true ? this.showSlots = true : this.errorMessage = true
-
+        for (let key of this.slots.keys()){
+          console.log(this.slots.get(key))
+          if (this.slots.get(key) === undefined)
+            this.slots.delete(key)
+          else if (this.slots.get(key).length === 0)
+            this.slots.delete(key)
+        }
+        for (let key of this.slots.keys()){
+          var array = this.slots.get(key)
+          if (array.length != 0)
+            array.sort((a, b)=>{
+              return a.ageLimit - b.ageLimit || a.fees - b.fees 
+            })
+          this.slots.set(key, array)
+        }
+        // for (let key of this.slots.keys()){
+        //   var array = this.slots.get(key)
+        //   if (array.length != 0)
+        //     array.sort((a, b)=>{
+        //       if (a.ageLimit == b.ageLimit)
+        //         if (a.fees.localeCompare('FREE')) return -1
+        //         else if(b.fees.localeCompare('FREE')) return 1
+        //     })
+        //   this.slots.set(key, array)
+        // }
+        this.slots.size > 0 ? this.showSlots = true : this.errorMessage = true
         this.submitDisabled = false
-        this.checkMessage = "Check Slot Availability"
-
-        this.slots.sort((a, b) => {
-          return a.ageLimit - b.ageLimit
-        });
       }
     )
   }

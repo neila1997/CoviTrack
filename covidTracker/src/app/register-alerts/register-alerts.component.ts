@@ -56,7 +56,7 @@ export class RegisterAlertsComponent implements OnInit {
     // console.log(this.alertForm.controls['city'].value)
     this.alertForm.controls['city_id'].setValue(this.districts.get(this.alertForm.controls['city'].value))
     this.alertForm.controls['dose'].setValue(Number(this.alertForm.controls['dose_type'].value))
-    console.log(this.alertForm.value)
+    this.alertForm.controls['free_dose'].setValue(Number(this.alertForm.controls['free_dose'].value))
     console.log(this.alertForm.value)
     this.api.register(this.alertForm.value).subscribe(
       x => {
@@ -71,7 +71,7 @@ export class RegisterAlertsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.alertForm = this.form.group({ 'name': ['', Validators.required], 'email': ['', Validators.required], 'age': [18, Validators.required], 'state': ['', Validators.required], 'city': ['', Validators.required], 'city_id': [1, Validators.required], 'vaccine': ['', Validators.required], 'dose_type':[0, Validators.required], 'dose':[0, Validators.required] })
+    this.alertForm = this.form.group({ 'name': ['', Validators.required], 'email': ['', Validators.required], 'age': [18, Validators.required], 'state': ['', Validators.required], 'city': ['', Validators.required], 'city_id': [1, Validators.required], 'vaccine': ['', Validators.required], 'dose_type':[0, Validators.required], 'dose':[0, Validators.required], 'free_dose':[0] })
   }
 
 }

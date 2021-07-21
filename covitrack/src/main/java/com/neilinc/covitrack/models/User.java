@@ -44,10 +44,21 @@ public class User {
 	@Column(name="vaccine_type")
 	private String vaccineType;
 	
+	@Column(name="free_dose")
+	private boolean freeDose;
+	
+	public boolean isFreeDose() {
+		return freeDose;
+	}
+
+	public void setFreeDose(boolean freeDose) {
+		this.freeDose = freeDose;
+	}
+
 	public User() {
 	}
 	
-	public User(String name, String state, String city, String email, int ageGroup, int active, int city_id, String vaccineType, int slotType) {
+	public User(String name, String state, String city, String email, int ageGroup, int active, int city_id, String vaccineType, int slotType, boolean freeDose) {
 		super();
 		this.name = name;
 		this.state = state;
@@ -58,6 +69,7 @@ public class User {
 		this.city_id = city_id;
 		this.slotType = slotType;
 		this.vaccineType = vaccineType;
+		this.freeDose = freeDose;
 	}
 
 	public int getSlotType() {

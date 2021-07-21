@@ -8,9 +8,14 @@
     color: whitesmoke !important;
 }
 
-/* .table{
+.table{
     table-layout: fixed !important;
-} */
+}
+
+.table-padding{
+    padding-left: 100px;
+    padding-right: 100px;
+}
 
 .grey-card{
     background-color: grey;
@@ -24,4 +29,39 @@
 .thead-blue{
     background-color:rgb(26, 64, 125);
     color: whitesmoke;
+}
+
+.btn-custom{
+    width: 65px !important;
+}
+.btn-custom-dose{
+    width: 100px !important;
+}
+
+.btn:hover{
+    color: whitesmoke !important;
+}
+
+.myButton {
+	box-shadow:inset 0px 1px 0px 0px #54a3f7;
+	background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+	background-color:#007dc1;
+	border-radius:24px;
+	border:2px solid #124d77;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	padding:8px 23px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #154682;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+	background-color:#0061a7;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
 }
