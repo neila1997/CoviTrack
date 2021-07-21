@@ -1,12 +1,11 @@
 <div class="row mt-5 p-3 blue-row sticky-top">
     <div class="col col-md-12 text-center h3">
-        District-Wise Tracker
+        Case Tracker
     </div>
 </div>
 
 <!-- This form takes the user input for the state and the district -->
-<form class="form-class col col-md-6 mx-auto mt-5 blue-form border shadow-lg rounded p-4" (submit)="lookForCases()"
-    ngNativeValidate>
+<form class="form-class col col-md-6 mx-auto mt-5 blue-form border shadow-lg rounded p-4" (submit)="lookForCases()" ngNativeValidate>
     <div class="form-group">
         <label for="state">State</label>
         <select class="form-control" [(ngModel)]="state" name="state" required (change)="updateCity()">

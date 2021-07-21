@@ -6,12 +6,10 @@
     </div>
 </div>
 
-<form class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg" (submit)="checkAvailability()"
-    ngNativeValidate>
+<form class="mt-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg" (submit)="checkAvailability()" ngNativeValidate>
     <div class="form-group">
         <label for="state">State</label>
-        <select class="form-control" [(ngModel)]="state" placeholder="Select" name="state" (change)="fetchCities()"
-            id="state" required>
+        <select class="form-control" [(ngModel)]="state" placeholder="Select" name="state" (change)="fetchCities()" id="state" required>
             <option *ngFor="let state of stateList" [value]="state">{{state}}</option>
         </select>
     </div>
@@ -28,8 +26,7 @@
     <div class="form-group row text-center">
         <div class="col-12 col-md-6 mt-3 mt-md-5">
             <!-- <input type="submit" class="btn btn-outline-success" [disabled]="submitDisabled" value="Look for Vaccines"> -->
-            <button class="btn btn-outline-success mx-auto" [disabled]="submitDisabled" value="Look for Vaccines"
-                type="submit" id="submit">
+            <button class="btn btn-outline-success mx-auto" [disabled]="submitDisabled" value="Look for Vaccines" type="submit" id="submit">
                 <span class="spinner-border spinner-border-sm text-success" *ngIf="submitDisabled"></span>
                 {{checkMessage}} </button>
         </div>

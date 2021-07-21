@@ -1,15 +1,13 @@
 <div class="mt-5 p-3 row blue-row sticky-top">
     <div class="col col-12 text-center">
         <span class="h3">
-            Receive an email on slot availability
+            Register for Slot Availability Alerts
         </span>
     </div>
 </div>
 
 <div class="container">
-    <form id="alert-form" [formGroup]="alertForm"
-        class="mt-5 mb-5 form-class col col-md-6 mx-auto rounded blue-form border p-4 shadow-lg"
-        (submit)="registerForAlerts()" autocomplete="off" ngNativeValidate>
+    <form id="alert-form" [formGroup]="alertForm" class="mt-5 form-class col col-xl-8 mx-auto rounded blue-form border p-4 shadow-lg" (submit)="registerForAlerts()" autocomplete="off" ngNativeValidate>
         <div class="form-group">
             <label class="font-weight-bold" for="name">Name</label>
             <input type="text" class="form-control" name="name" required formControlName="name">
@@ -21,11 +19,11 @@
         <div class="form-group">
             <label class="font-weight-bold" for="age_group">Age Group</label>
             <div class="form-check">
-                <label class="form-check-label">
+                <label class="form-check-label col col-12 col-sm-3">
                     <input type="radio" class="form-check-input" name="age" required formControlName="age" value="18">
                     18-44
                 </label>
-                <label class="form-check-label ml-5">
+                <label class="form-check-label col col-12 col-sm-3">
                     <input type="radio" class="form-check-input" name="age" required formControlName="age" value="45">
                     45+
                 </label>
@@ -33,8 +31,7 @@
         </div>
         <div class="form-group">
             <label class="font-weight-bold" for="state">State</label>
-            <select class="form-control" placeholder="Select" name="state" (change)="fetchCities()"
-                formControlName="state" required>
+            <select class="form-control" placeholder="Select" name="state" (change)="fetchCities()" formControlName="state" required>
                 <option disabled selected>Select a State</option>
                 <option *ngFor="let state of stateList" [value]="state">{{state}}</option>
             </select>
@@ -50,17 +47,17 @@
         <div class="form-group">
             <label class="font-weight-bold" for="vaccine">Vaccine</label>
             <div class="form-check">
-                <label class="form-check-label">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
                         value="COVISHIELD">
                     Covishield
                 </label>
-                <label class="form-check-label ml-5">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
                         value="COVAXIN">
                     Covaxin
                 </label>
-                <label class="form-check-label ml-5">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="vaccine" required formControlName="vaccine"
                         value="SPUTNIK V">
                     Sputnik V
@@ -70,17 +67,17 @@
         <div class="form-group">
             <label for="dose_type" class="font-weight-bold">Dose Type</label>
             <div class="form-check">
-                <label class="form-check-label">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
                         value="1">
                     1st Dose
                 </label>
-                <label class="form-check-label ml-5">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
                         value="2">
                     2nd Dose
                 </label>
-                <label class="form-check-label ml-5">
+                <label class="form-check-label col-12 col-sm-6 col-lg-4">
                     <input type="radio" class="form-check-input" name="dose_type" required formControlName="dose_type"
                         value="0">
                     Both Doses
